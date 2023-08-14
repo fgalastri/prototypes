@@ -1,0 +1,2 @@
+ticket,assignedArea,assignedTo,nfnum,series,issueDate,tomCNPJ,vendorCNPJ,vendor,vendorName,status,ISSRet ,ISSDest,INSS ,IRRF ,PIS ,COFINS	,CSLL,totalValue
+1,F12,fgalastri@suzano.com.br,12334,1,12.12.2023,11637999801,11637999801,123445667,Fornecedor teste,Pedido inválido,12.00,13.00,14.00, 15.00, 55.55,77.77,54.45,1233.22
