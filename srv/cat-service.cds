@@ -1,16 +1,91 @@
 using my.prototypes as my from '../db/data-model';
 
 service MonitorService {
-    @readonly entity Tickets as projection on my.Tickets  actions {
-    action rejectTravel();
-    action acceptTravel();
+    entity Tickets as projection on my.Tickets  actions {
+    action solve();
+    action assign();
+    action showPDF();
   };
-  
-    entity Status as projection on my.Status;
-}   
+    entity POs as projection on my.POs;   
+    entity AssignmentLogs as projection on my.AssignmentLogs;
+} ;
+
+
+
+annotate MonitorService.AssignmentLogs with @(
+
+
+    UI.LineItem : [
+    {
+            $Type : 'UI.DataField',
+            Value :  assignDate 	
+    },
+    {
+            $Type : 'UI.DataField',
+            Value :  assignTime 	
+    },
+    {
+            $Type : 'UI.DataField',
+            Value :  status 	
+    },
+    {
+            $Type : 'UI.DataField',
+            Value :  assignedTo 	
+    },
+    {
+            $Type : 'UI.DataField',
+            Value :  assignedBy 	
+    }
+    
+     ]
+
+
+) {
+
+    assignDate @title: '{i18n>assignDate}';
+    assignTime 	@title: '{i18n>assignTime}';	
+    status @title: '{i18n>status}'; 		
+    assignedTo @title: '{i18n>assignedTo}'; 	
+    assignedBy @title: '{i18n>assignedBy}'; 	
+
+} ;
 
 
 annotate MonitorService.Tickets with @(
+
+    Capabilities : {
+
+        DeleteRestrictions:{Deletable: false}
+    },        
+
+    UI.HeaderInfo: {
+        TypeName: '{@i18n>ticket}',
+        TypeNamePlural: '{@i18n>tickets}',
+        Title: { Value: ticket },
+        Description: { Value: '{@i18n>ticket}' }
+    },
+
+     UI.Identification : [  {
+            $Type : 'UI.DataFieldForAction',
+            Label :  'Atribuir',
+            Action : 'MonitorService.assign'
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Label :  'Resolução',
+            Action : 'MonitorService.solve'
+        },
+        {
+            $Type : 'UI.DataFieldForAction',
+            Label :  'Exibir PDF',
+            Action : 'MonitorService.showPDF'
+        }                
+     ],
+
+
+    Common: {
+        Label: 'Label'
+    },
 
 
    UI.FieldGroup #NFHeader : {
@@ -197,21 +272,23 @@ annotate MonitorService.Tickets with @(
         },
         {
             $Type : 'UI.DataFieldForAction',
-            Label : 'Exibir PDF',
-            Action : 'MonitorService.showPDF'
+            Label :  'Resolução',
+            Action : 'MonitorService.solve'
         },
         {
             $Type : 'UI.DataFieldForAction',
-            Label :  'Resolução',
-            Action : 'MonitorService.solve'
+            Label : 'Exibir PDF',
+            Action : 'MonitorService.showPDF'
         }
     ] ,
 
     UI.Facets : [
+
         {
             $Type : 'UI.CollectionFacet',
             Label : '{i18n>BasicData}',
             ID : 'BasicData',
+
             Facets : [
                 {
                     $Type : 'UI.ReferenceFacet',
@@ -242,49 +319,24 @@ annotate MonitorService.Tickets with @(
             ],
         },
         {
-            $Type : 'UI.CollectionFacet',
-            Label : '{i18n>POs}',
-            ID : 'POs',
-            Facets : [
-                {
-                    $Type : 'UI.ReferenceFacet',
-                    Label : '{i18n>POs}',
-                    ID : 'POs',
-                    Target : '@UI.FieldGroup#POs'
-                }
-            ]
+            $Type : 'UI.ReferenceFacet',
+            Label : '{i18n>NFTaxes}',
+            ID : 'NFTaxes',
+            Target : '@UI.FieldGroup#NFTaxes'
         },
         {
-            $Type : 'UI.CollectionFacet',
-            Label : '{i18n>Taxes}',
-            ID : 'Taxes',
-            Facets : [
-                {
-                    $Type : 'UI.ReferenceFacet',
-                    Label : '{i18n>NFTaxes}',
-                    ID : 'NFTaxes',
-                    Target : '@UI.FieldGroup#NFTaxes'
-                }
-            ]
-        },
-        {
-            $Type : 'UI.CollectionFacet',
+            $Type : 'UI.ReferenceFacet',
             Label : '{i18n>AssignmentLogs}',
             ID : 'AssignmentLogs',
-            Facets : [
-                {
-                    $Type : 'UI.ReferenceFacet',
-                    Label : '{i18n>AssignmentLogs}',
-                    ID : 'AssignmentLogs',
-                    Target : '@UI.FieldGroup#AssignmentLogs',
-                }
-            ]
+            Target : 'AssignmentLogs/@UI.LineItem'
+        },
+        {
+            $Type : 'UI.ReferenceFacet',
+            Label : '{i18n>POs}',
+            ID : 'POs',
+            Target : 'ticketPOs/@UI.LineItem'
         }
-
-
-
     ]
-
 
 ) {
 
@@ -301,3 +353,53 @@ annotate MonitorService.Tickets with @(
         status @title: '{i18n>status}';
         totalValue @title : '{i18n>totalValue}';
 };
+
+
+annotate MonitorService.POs with @(
+
+UI.LineItem : [
+        {
+            $Type : 'UI.DataField',
+            Value :  poNumber
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  poItem
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  FRS
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  FRSItem
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  service
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  description
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  quantity
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  value
+        }
+
+    ]
+) {
+    poNumber @title: '{i18n>poNumber}';
+    poItem @title: '{i18n>poItem}';
+    service @title: '{i18n>service}';
+    description @title: '{i18n>description}';
+    quantity @title: '{i18n>quantity}';
+    value @title: '{i18n>value}';
+    FRS @title: '{i18n>FRS}';
+    FRSItem @title: '{i18n>FRSItem }';
+};
+
