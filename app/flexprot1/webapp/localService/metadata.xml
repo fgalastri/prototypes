@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="MonitorService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Tickets" EntityType="MonitorService.Tickets">
+                    <NavigationPropertyBinding Path="ticketPOs" Target="POs"/>
+                    <NavigationPropertyBinding Path="AssignmentLogs" Target="AssignmentLogs"/>
+                </EntitySet>
+                <EntitySet Name="POs" EntityType="MonitorService.POs">
+                    <NavigationPropertyBinding Path="to_Ticket" Target="Tickets"/>
+                </EntitySet>
+                <EntitySet Name="AssignmentLogs" EntityType="MonitorService.AssignmentLogs">
+                    <NavigationPropertyBinding Path="to_Ticket" Target="Tickets"/>
+                </EntitySet>
+            </EntityContainer>
+            <EntityType Name="Tickets">
+                <Key>
+                    <PropertyRef Name="ticket"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ticket" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="assignedArea" Type="Edm.String" MaxLength="10"/>
+                <Property Name="assignedTo" Type="Edm.String" MaxLength="20"/>
+                <Property Name="nfnum" Type="Edm.String" MaxLength="6"/>
+                <Property Name="series" Type="Edm.String" MaxLength="2"/>
+                <Property Name="issueDate" Type="Edm.String" MaxLength="10"/>
+                <Property Name="tomCNPJ" Type="Edm.String" MaxLength="15"/>
+                <Property Name="vendorCNPJ" Type="Edm.String" MaxLength="15"/>
+                <Property Name="vendor" Type="Edm.String" MaxLength="10"/>
+                <Property Name="vendorName" Type="Edm.String" MaxLength="25"/>
+                <Property Name="status" Type="Edm.String" MaxLength="55"/>
+                <Property Name="ISSRet" Type="Edm.String" MaxLength="12"/>
+                <Property Name="ISSDest" Type="Edm.String" MaxLength="12"/>
+                <Property Name="INSS" Type="Edm.String" MaxLength="12"/>
+                <Property Name="IRRF" Type="Edm.String" MaxLength="12"/>
+                <Property Name="PIS" Type="Edm.String" MaxLength="12"/>
+                <Property Name="COFINS" Type="Edm.String" MaxLength="12"/>
+                <Property Name="CSLL" Type="Edm.String" MaxLength="12"/>
+                <Property Name="totalValue" Type="Edm.Decimal" Scale="3" Precision="16"/>
+                <NavigationProperty Name="ticketPOs" Type="Collection(MonitorService.POs)" Partner="to_Ticket">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="AssignmentLogs" Type="Collection(MonitorService.AssignmentLogs)" Partner="to_Ticket">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="POs">
+                <Key>
+                    <PropertyRef Name="poNumber"/>
+                    <PropertyRef Name="poItem"/>
+                    <PropertyRef Name="FRS"/>
+                    <PropertyRef Name="FRSItem"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="poNumber" Type="Edm.String" MaxLength="10" Nullable="false"/>
+                <Property Name="poItem" Type="Edm.String" MaxLength="5" Nullable="false"/>
+                <Property Name="FRS" Type="Edm.String" MaxLength="12" Nullable="false"/>
+                <Property Name="FRSItem" Type="Edm.String" MaxLength="5" Nullable="false"/>
+                <Property Name="service" Type="Edm.String" MaxLength="18"/>
+                <Property Name="description" Type="Edm.String" MaxLength="30"/>
+                <Property Name="quantity" Type="Edm.Decimal" Scale="3" Precision="12"/>
+                <Property Name="value" Type="Edm.Decimal" Scale="3" Precision="16"/>
+                <NavigationProperty Name="to_Ticket" Type="MonitorService.Tickets" Partner="ticketPOs">
+                    <ReferentialConstraint Property="to_Ticket_ticket" ReferencedProperty="ticket"/>
+                </NavigationProperty>
+                <Property Name="to_Ticket_ticket" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="AssignmentLogs">
+                <Key>
+                    <PropertyRef Name="assignDate"/>
+                    <PropertyRef Name="assignTime"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="assignDate" Type="Edm.String" MaxLength="10" Nullable="false"/>
+                <Property Name="assignTime" Type="Edm.String" MaxLength="10" Nullable="false"/>
+                <Property Name="status" Type="Edm.String" MaxLength="30"/>
+                <Property Name="assignedTo" Type="Edm.String" MaxLength="25"/>
+                <Property Name="assignedBy" Type="Edm.String" MaxLength="25"/>
+                <NavigationProperty Name="to_Ticket" Type="MonitorService.Tickets" Partner="AssignmentLogs">
+                    <ReferentialConstraint Property="to_Ticket_ticket" ReferencedProperty="ticket"/>
+                </NavigationProperty>
+                <Property Name="to_Ticket_ticket" Type="Edm.Int32"/>
+            </EntityType>
+            <Action Name="solve" IsBound="true">
+                <Parameter Name="in" Type="MonitorService.Tickets"/>
+            </Action>
+            <Action Name="assign" IsBound="true">
+                <Parameter Name="in" Type="MonitorService.Tickets"/>
+            </Action>
+            <Action Name="showPDF" IsBound="true">
+                <Parameter Name="in" Type="MonitorService.Tickets"/>
+            </Action>
+            <Annotations Target="MonitorService.Tickets">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="{@i18n>ticket}"/>
+                            <PropertyValue Property="TypeNamePlural" String="{@i18n>tickets}"/>
+                                <PropertyValue Property="Title">
+                                    <Record Type="UI.DataField">
+                                        <PropertyValue Property="Value" Path="ticket"/>
+                                    </Record>
+                                </PropertyValue>
+                                <PropertyValue Property="Description">
+                                    <Record Type="UI.DataField">
+                                        <PropertyValue Property="Value" String="{@i18n>ticket}"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Annotation>
+                            <Annotation Term="UI.Identification">
+                                <Collection>
+                                    <Record Type="UI.DataFieldForAction">
+                                        <PropertyValue Property="Label" String="Atribuir"/>
+                                        <PropertyValue Property="Action" String="MonitorService.assign"/>
+                                    </Record>
+                                    <Record Type="UI.DataFieldForAction">
+                                        <PropertyValue Property="Label" String="Resolução"/>
+                                        <PropertyValue Property="Action" String="MonitorService.solve"/>
+                                    </Record>
+                                    <Record Type="UI.DataFieldForAction">
+                                        <PropertyValue Property="Label" String="Exibir PDF"/>
+                                        <PropertyValue Property="Action" String="MonitorService.showPDF"/>
+                                    </Record>
+                                </Collection>
+                            </Annotation>
+                            <Annotation Term="UI.FieldGroup" Qualifier="NFHeader">
+                                <Record Type="UI.FieldGroupType">
+                                    <PropertyValue Property="Data">
+                                        <Collection>
+                                            <Record Type="UI.DataField">
+                                                <PropertyValue Property="Value" Path="ticket"/>
+                                                <PropertyValue Property="Label" String="{i18n>ticket}"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="nfnum"/>
+                                                    <PropertyValue Property="Label" String="{i18n>nfnum}"/>
+                                                    </Record>
+                                                    <Record Type="UI.DataField">
+                                                        <PropertyValue Property="Value" Path="series"/>
+                                                        <PropertyValue Property="Label" String="{i18n>series}"/>
+                                                        </Record>
+                                                        <Record Type="UI.DataField">
+                                                            <PropertyValue Property="Value" Path="issueDate"/>
+                                                            <PropertyValue Property="Label" String="{i18n>issueDate}"/>
+                                                            </Record>
+                                                        </Collection>
+                                                    </PropertyValue>
+                                                </Record>
+                                            </Annotation>
+                                            <Annotation Term="UI.FieldGroup" Qualifier="NFPartners">
+                                                <Record Type="UI.FieldGroupType">
+                                                    <PropertyValue Property="Data">
+                                                        <Collection>
+                                                            <Record Type="UI.DataField">
+                                                                <PropertyValue Property="Value" Path="tomCNPJ"/>
+                                                                <PropertyValue Property="Label" String="{i18n>tomCNPJ}"/>
+                                                                </Record>
+                                                                <Record Type="UI.DataField">
+                                                                    <PropertyValue Property="Value" Path="vendorCNPJ"/>
+                                                                    <PropertyValue Property="Label" String="{i18n>vendorCNPJ}"/>
+                                                                    </Record>
+                                                                    <Record Type="UI.DataField">
+                                                                        <PropertyValue Property="Value" Path="vendor"/>
+                                                                        <PropertyValue Property="Label" String="{i18n>vendor}"/>
+                                                                        </Record>
+                                                                        <Record Type="UI.DataField">
+                                                                            <PropertyValue Property="Value" Path="vendorName"/>
+                                                                            <PropertyValue Property="Label" String="{i18n>vendorName}"/>
+                                                                            </Record>
+                                                                        </Collection>
+                                                                    </PropertyValue>
+                                                                </Record>
+                                                            </Annotation>
+                                                            <Annotation Term="UI.FieldGroup" Qualifier="NFStatus">
+                                                                <Record Type="UI.FieldGroupType">
+                                                                    <PropertyValue Property="Data">
+                                                                        <Collection>
+                                                                            <Record Type="UI.DataField">
+                                                                                <PropertyValue Property="Value" Path="status"/>
+                                                                                <PropertyValue Property="Label" String="{i18n>status}"/>
+                                                                                </Record>
+                                                                            </Collection>
+                                                                        </PropertyValue>
+                                                                    </Record>
+                                                                </Annotation>
+                                                                <Annotation Term="UI.FieldGroup" Qualifier="NFAssignment">
+                                                                    <Record Type="UI.FieldGroupType">
+                                                                        <PropertyValue Property="Data">
+                                                                            <Collection>
+                                                                                <Record Type="UI.DataField">
+                                                                                    <PropertyValue Property="Value" Path="assignedArea"/>
+                                                                                    <PropertyValue Property="Label" String="{i18n>assignedArea}"/>
+                                                                                    </Record>
+                                                                                    <Record Type="UI.DataField">
+                                                                                        <PropertyValue Property="Value" Path="assignedTo"/>
+                                                                                        <PropertyValue Property="Label" String="{i18n>assignedTo}"/>
+                                                                                        </Record>
+                                                                                    </Collection>
+                                                                                </PropertyValue>
+                                                                            </Record>
+                                                                        </Annotation>
+                                                                        <Annotation Term="UI.FieldGroup" Qualifier="NFTaxes">
+                                                                            <Record Type="UI.FieldGroupType">
+                                                                                <PropertyValue Property="Data">
+                                                                                    <Collection>
+                                                                                        <Record Type="UI.DataField">
+                                                                                            <PropertyValue Property="Value" Path="INSS"/>
+                                                                                            <PropertyValue Property="Label" String="{i18n>INSS}"/>
+                                                                                            </Record>
+                                                                                            <Record Type="UI.DataField">
+                                                                                                <PropertyValue Property="Value" Path="IRRF"/>
+                                                                                                <PropertyValue Property="Label" String="{i18n>IRRF}"/>
+                                                                                                </Record>
+                                                                                                <Record Type="UI.DataField">
+                                                                                                    <PropertyValue Property="Value" Path="ISSRet"/>
+                                                                                                    <PropertyValue Property="Label" String="{i18n>ISSRet}"/>
+                                                                                                    </Record>
+                                                                                                    <Record Type="UI.DataField">
+                                                                                                        <PropertyValue Property="Value" Path="ISSDest"/>
+                                                                                                        <PropertyValue Property="Label" String="{i18n>ISSDest}"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="UI.DataField">
+                                                                                                            <PropertyValue Property="Value" Path="PIS"/>
+                                                                                                            <PropertyValue Property="Label" String="{i18n>PIS}"/>
+                                                                                                            </Record>
+                                                                                                            <Record Type="UI.DataField">
+                                                                                                                <PropertyValue Property="Value" Path="COFINS"/>
+                                                                                                                <PropertyValue Property="Label" String="{i18n>COFINS}"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="CSLL"/>
+                                                                                                                    <PropertyValue Property="Label" String="{i18n>CSLL}"/>
+                                                                                                                    </Record>
+                                                                                                                    <Record Type="UI.DataField">
+                                                                                                                        <PropertyValue Property="Value" Path="totalValue"/>
+                                                                                                                        <PropertyValue Property="Label" String="{i18n>totalValue}"/>
+                                                                                                                        </Record>
+                                                                                                                    </Collection>
+                                                                                                                </PropertyValue>
+                                                                                                            </Record>
+                                                                                                        </Annotation>
+                                                                                                        <Annotation Term="UI.SelectionFields">
+                                                                                                            <Collection>
+                                                                                                                <PropertyPath>ticket</PropertyPath>
+                                                                                                                <PropertyPath>assignedArea</PropertyPath>
+                                                                                                                <PropertyPath>assignedTo</PropertyPath>
+                                                                                                                <PropertyPath>nfnum</PropertyPath>
+                                                                                                                <PropertyPath>status</PropertyPath>
+                                                                                                            </Collection>
+                                                                                                        </Annotation>
+                                                                                                        <Annotation Term="UI.LineItem">
+                                                                                                            <Collection>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="ticket"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="assignedArea"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="assignedTo"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="nfnum"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="series"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="issueDate"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="tomCNPJ"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="vendorCNPJ"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="vendor"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="vendorName"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="status"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataField">
+                                                                                                                    <PropertyValue Property="Value" Path="totalValue"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataFieldForAction">
+                                                                                                                    <PropertyValue Property="Label" String="Atribuir"/>
+                                                                                                                    <PropertyValue Property="Action" String="MonitorService.assign"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataFieldForAction">
+                                                                                                                    <PropertyValue Property="Label" String="Resolução"/>
+                                                                                                                    <PropertyValue Property="Action" String="MonitorService.solve"/>
+                                                                                                                </Record>
+                                                                                                                <Record Type="UI.DataFieldForAction">
+                                                                                                                    <PropertyValue Property="Label" String="Exibir PDF"/>
+                                                                                                                    <PropertyValue Property="Action" String="MonitorService.showPDF"/>
+                                                                                                                </Record>
+                                                                                                            </Collection>
+                                                                                                        </Annotation>
+                                                                                                        <Annotation Term="UI.Facets">
+                                                                                                            <Collection>
+                                                                                                                <Record Type="UI.CollectionFacet">
+                                                                                                                    <PropertyValue Property="Label" String="{i18n>BasicData}"/>
+                                                                                                                        <PropertyValue Property="ID" String="BasicData"/>
+                                                                                                                        <PropertyValue Property="Facets">
+                                                                                                                            <Collection>
+                                                                                                                                <Record Type="UI.ReferenceFacet">
+                                                                                                                                    <PropertyValue Property="Label" String="{i18n>NFHeader}"/>
+                                                                                                                                        <PropertyValue Property="ID" String="NFHeader"/>
+                                                                                                                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#NFHeader"/>
+                                                                                                                                    </Record>
+                                                                                                                                    <Record Type="UI.ReferenceFacet">
+                                                                                                                                        <PropertyValue Property="Label" String="{i18n>NFAssignment}"/>
+                                                                                                                                            <PropertyValue Property="ID" String="NFAssignment"/>
+                                                                                                                                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#NFAssignment"/>
+                                                                                                                                        </Record>
+                                                                                                                                        <Record Type="UI.ReferenceFacet">
+                                                                                                                                            <PropertyValue Property="Label" String="{i18n>NFPartners}"/>
+                                                                                                                                                <PropertyValue Property="ID" String="NFPartners"/>
+                                                                                                                                                <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#NFPartners"/>
+                                                                                                                                            </Record>
+                                                                                                                                            <Record Type="UI.ReferenceFacet">
+                                                                                                                                                <PropertyValue Property="Label" String="{i18n>NFStatus}"/>
+                                                                                                                                                    <PropertyValue Property="ID" String="NFStatus"/>
+                                                                                                                                                    <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#NFStatus"/>
+                                                                                                                                                </Record>
+                                                                                                                                            </Collection>
+                                                                                                                                        </PropertyValue>
+                                                                                                                                    </Record>
+                                                                                                                                    <Record Type="UI.ReferenceFacet">
+                                                                                                                                        <PropertyValue Property="Label" String="{i18n>NFTaxes}"/>
+                                                                                                                                            <PropertyValue Property="ID" String="NFTaxes"/>
+                                                                                                                                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#NFTaxes"/>
+                                                                                                                                        </Record>
+                                                                                                                                        <Record Type="UI.ReferenceFacet">
+                                                                                                                                            <PropertyValue Property="Label" String="{i18n>AssignmentLogs}"/>
+                                                                                                                                                <PropertyValue Property="ID" String="AssignmentLogs"/>
+                                                                                                                                                <PropertyValue Property="Target" AnnotationPath="AssignmentLogs/@UI.LineItem"/>
+                                                                                                                                            </Record>
+                                                                                                                                            <Record Type="UI.ReferenceFacet">
+                                                                                                                                                <PropertyValue Property="Label" String="{i18n>POs}"/>
+                                                                                                                                                    <PropertyValue Property="ID" String="POs"/>
+                                                                                                                                                    <PropertyValue Property="Target" AnnotationPath="ticketPOs/@UI.LineItem"/>
+                                                                                                                                                </Record>
+                                                                                                                                            </Collection>
+                                                                                                                                        </Annotation>
+                                                                                                                                        <Annotation Term="Common.Label" String="Label"/>
+                                                                                                                                    </Annotations>
+                                                                                                                                    <Annotations Target="MonitorService.EntityContainer/Tickets">
+                                                                                                                                        <Annotation Term="Capabilities.DeleteRestrictions">
+                                                                                                                                            <Record Type="Capabilities.DeleteRestrictionsType">
+                                                                                                                                                <PropertyValue Property="Deletable" Bool="false"/>
+                                                                                                                                            </Record>
+                                                                                                                                        </Annotation>
+                                                                                                                                    </Annotations>
+                                                                                                                                    <Annotations Target="MonitorService.Tickets/createdAt">
+                                                                                                                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                        <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                                                                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                                                                                                                        </Annotations>
+                                                                                                                                        <Annotations Target="MonitorService.Tickets/createdBy">
+                                                                                                                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                            <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                                                                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                            <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                                                                                                                                </Annotations>
+                                                                                                                                                <Annotations Target="MonitorService.Tickets/modifiedAt">
+                                                                                                                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                                                                                                                                                    </Annotations>
+                                                                                                                                                    <Annotations Target="MonitorService.Tickets/modifiedBy">
+                                                                                                                                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                                                                                                                                            </Annotations>
+                                                                                                                                                            <Annotations Target="MonitorService.Tickets/ticket">
+                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>ticket}"/>
+                                                                                                                                                                </Annotations>
+                                                                                                                                                                <Annotations Target="MonitorService.Tickets/assignedArea">
+                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>assignedArea}"/>
+                                                                                                                                                                    </Annotations>
+                                                                                                                                                                    <Annotations Target="MonitorService.Tickets/assignedTo">
+                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>assignedTo}"/>
+                                                                                                                                                                        </Annotations>
+                                                                                                                                                                        <Annotations Target="MonitorService.Tickets/nfnum">
+                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>nfnum}"/>
+                                                                                                                                                                            </Annotations>
+                                                                                                                                                                            <Annotations Target="MonitorService.Tickets/series">
+                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>series}"/>
+                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                <Annotations Target="MonitorService.Tickets/issueDate">
+                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>issueDate}"/>
+                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                    <Annotations Target="MonitorService.Tickets/tomCNPJ">
+                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>tomCNPJ}"/>
+                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                        <Annotations Target="MonitorService.Tickets/vendorCNPJ">
+                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>vendorCNPJ}"/>
+                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                            <Annotations Target="MonitorService.Tickets/vendor">
+                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>vendor}"/>
+                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                <Annotations Target="MonitorService.Tickets/vendorName">
+                                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>vendorName}"/>
+                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                    <Annotations Target="MonitorService.Tickets/status">
+                                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>status}"/>
+                                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                                        <Annotations Target="MonitorService.Tickets/totalValue">
+                                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>totalValue}"/>
+                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                            <Annotations Target="MonitorService.POs">
+                                                                                                                                                                                                                <Annotation Term="UI.LineItem">
+                                                                                                                                                                                                                    <Collection>
+                                                                                                                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                                                                                                                            <PropertyValue Property="Value" Path="poNumber"/>
+                                                                                                                                                                                                                        </Record>
+                                                                                                                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                                                                                                                            <PropertyValue Property="Value" Path="poItem"/>
+                                                                                                                                                                                                                        </Record>
+                                                                                                                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                                                                                                                            <PropertyValue Property="Value" Path="FRS"/>
+                                                                                                                                                                                                                        </Record>
+                                                                                                                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                                                                                                                            <PropertyValue Property="Value" Path="FRSItem"/>
+                                                                                                                                                                                                                        </Record>
+                                                                                                                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                                                                                                                            <PropertyValue Property="Value" Path="service"/>
+                                                                                                                                                                                                                        </Record>
+                                                                                                                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                                                                                                                            <PropertyValue Property="Value" Path="description"/>
+                                                                                                                                                                                                                        </Record>
+                                                                                                                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                                                                                                                            <PropertyValue Property="Value" Path="quantity"/>
+                                                                                                                                                                                                                        </Record>
+                                                                                                                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                                                                                                                            <PropertyValue Property="Value" Path="value"/>
+                                                                                                                                                                                                                        </Record>
+                                                                                                                                                                                                                    </Collection>
+                                                                                                                                                                                                                </Annotation>
+                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                            <Annotations Target="MonitorService.POs/createdAt">
+                                                                                                                                                                                                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                                                                                <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                                                                                                                                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                                <Annotations Target="MonitorService.POs/createdBy">
+                                                                                                                                                                                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                                                                                    <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                                                                                                                                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                                                                                    <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                                                        <Annotations Target="MonitorService.POs/modifiedAt">
+                                                                                                                                                                                                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                                                                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                                            <Annotations Target="MonitorService.POs/modifiedBy">
+                                                                                                                                                                                                                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                                                                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                                                                                                <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                                                    <Annotations Target="MonitorService.POs/poNumber">
+                                                                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>poNumber}"/>
+                                                                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                                                                        <Annotations Target="MonitorService.POs/poItem">
+                                                                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>poItem}"/>
+                                                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                                                            <Annotations Target="MonitorService.POs/FRS">
+                                                                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>FRS}"/>
+                                                                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                                                                <Annotations Target="MonitorService.POs/FRSItem">
+                                                                                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>FRSItem }"/>
+                                                                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                                                                    <Annotations Target="MonitorService.POs/service">
+                                                                                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>service}"/>
+                                                                                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                                                                                        <Annotations Target="MonitorService.POs/description">
+                                                                                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>description}"/>
+                                                                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                                                                            <Annotations Target="MonitorService.POs/quantity">
+                                                                                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>quantity}"/>
+                                                                                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                                                                                <Annotations Target="MonitorService.POs/value">
+                                                                                                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>value}"/>
+                                                                                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                                                                                    <Annotations Target="MonitorService.AssignmentLogs">
+                                                                                                                                                                                                                                                                        <Annotation Term="UI.LineItem">
+                                                                                                                                                                                                                                                                            <Collection>
+                                                                                                                                                                                                                                                                                <Record Type="UI.DataField">
+                                                                                                                                                                                                                                                                                    <PropertyValue Property="Value" Path="assignDate"/>
+                                                                                                                                                                                                                                                                                </Record>
+                                                                                                                                                                                                                                                                                <Record Type="UI.DataField">
+                                                                                                                                                                                                                                                                                    <PropertyValue Property="Value" Path="assignTime"/>
+                                                                                                                                                                                                                                                                                </Record>
+                                                                                                                                                                                                                                                                                <Record Type="UI.DataField">
+                                                                                                                                                                                                                                                                                    <PropertyValue Property="Value" Path="status"/>
+                                                                                                                                                                                                                                                                                </Record>
+                                                                                                                                                                                                                                                                                <Record Type="UI.DataField">
+                                                                                                                                                                                                                                                                                    <PropertyValue Property="Value" Path="assignedTo"/>
+                                                                                                                                                                                                                                                                                </Record>
+                                                                                                                                                                                                                                                                                <Record Type="UI.DataField">
+                                                                                                                                                                                                                                                                                    <PropertyValue Property="Value" Path="assignedBy"/>
+                                                                                                                                                                                                                                                                                </Record>
+                                                                                                                                                                                                                                                                            </Collection>
+                                                                                                                                                                                                                                                                        </Annotation>
+                                                                                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                                                                                    <Annotations Target="MonitorService.AssignmentLogs/createdAt">
+                                                                                                                                                                                                                                                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                                                                                                                                        <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                                                                                                                                                                                                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                                                                                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                                                                                                        <Annotations Target="MonitorService.AssignmentLogs/createdBy">
+                                                                                                                                                                                                                                                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                                                                                                                                            <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                                                                                                                                                                                                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                                                                                                                                            <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                                                                                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                                                                                                <Annotations Target="MonitorService.AssignmentLogs/modifiedAt">
+                                                                                                                                                                                                                                                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                                                                                                                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                                                                                                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                                                                                                    <Annotations Target="MonitorService.AssignmentLogs/modifiedBy">
+                                                                                                                                                                                                                                                                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                                                                                                                                                                                                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                                                                                                                                                                                                                        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                                                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                                                                                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                                                                                                            <Annotations Target="MonitorService.AssignmentLogs/assignDate">
+                                                                                                                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>assignDate}"/>
+                                                                                                                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                                                                                                                <Annotations Target="MonitorService.AssignmentLogs/assignTime">
+                                                                                                                                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>assignTime}"/>
+                                                                                                                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                                                                                                                    <Annotations Target="MonitorService.AssignmentLogs/status">
+                                                                                                                                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>status}"/>
+                                                                                                                                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                                                                                                                                        <Annotations Target="MonitorService.AssignmentLogs/assignedTo">
+                                                                                                                                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>assignedTo}"/>
+                                                                                                                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                                                                                                                            <Annotations Target="MonitorService.AssignmentLogs/assignedBy">
+                                                                                                                                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>assignedBy}"/>
+                                                                                                                                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                                                                                                                            </Schema>
+                                                                                                                                                                                                                                                                                                        </edmx:DataServices>
+                                                                                                                                                                                                                                                                                                    </edmx:Edmx>
