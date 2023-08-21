@@ -117,19 +117,6 @@
                                         "route": "TicketsObjectPage"
                                     }
                                 }
-                            },
-                            "controlConfiguration": {
-                                "@com.sap.vocabularies.UI.v1.LineItem": {
-                                    "actions": {
-                                        "Main.controller.js": {
-                                            "press": "flexprot.flexprot1.ext.custom.Custom.customAssign",
-                                            "visible": true,
-                                            "enabled": true,
-                                            "requiresSelection": true,
-                                            "text": "Atribuição custom"
-                                        }
-                                    }
-                                }
                             }
                         }
                     },
@@ -148,11 +135,7 @@
                                 "header": {
                                     "actions": {
                                         "Custom": {
-                                            "press": "flexprot.flexprot1.ext.custom.Custom.customAssign",
-                                            "visible": true,
-                                            "enabled": true,
-                                            "requiresSelection": false,
-                                            "text": "Custom Assign"
+                                            "requiresSelection": false
                                         }
                                     }
                                 }

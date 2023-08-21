@@ -5,7 +5,10 @@ sap.ui.define([
 
     return {
         customAssign: function(oEvent) {
-            MessageToast.show("Custom handler invoked.");
+
+            MessageToast.show("fom fom ");
+            
+
         }
     };
-});
+}); 

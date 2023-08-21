@@ -25,6 +25,7 @@ entity Tickets : managed {
   totalValue : Decimal(16, 3);
   ticketPOs : Composition of many POs on ticketPOs.to_Ticket = $self;
   AssignmentLogs : Composition of many AssignmentLogs on AssignmentLogs.to_Ticket = $self;
+  AniLogs : Composition of many AniLogs on AniLogs.to_Ticket = $self;
 } ; 
 
 
@@ -52,4 +53,19 @@ entity AssignmentLogs: managed {
   assignedTo : String(25);
   assignedBy : String(25);
   to_Ticket : Association to Tickets;
+}
+
+entity AniLogs : managed {
+  key ticket : Integer; 
+  key ticketSeq : Integer;
+      nfnum : String(15);
+      process : String(5);
+      status : String(3); 
+      username : String(20);
+      date : String(10);
+      time : String(10);
+      type : String(3);
+      msgno : String(3);
+      message : String(100);
+      to_Ticket : Association to Tickets on ticket = to_Ticket.ticket; 
 }

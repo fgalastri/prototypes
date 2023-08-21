@@ -1,0 +1,15 @@
+GET http://localhost:4004/odata/v4/monitor/Tickets
+
+###
+
+POST http://localhost:4004/odata/v4/monitor/Tickets
+Content-Type: application/json
+
+{
+    "ticket" : 120,
+    "assignedArea"  : "F99"
+}
+
+###
+POST http://localhost:4004/odata/v4/monitor/Tickets/1/showPDF
+Content-Type: application/json

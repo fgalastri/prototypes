@@ -1,18 +1,28 @@
 using my.prototypes as my from '../db/data-model';
 
 service MonitorService {
-    entity Tickets as projection on my.Tickets  actions {
-    action solve();
-    action assign();
-    action showPDF();
-  };
+    entity Tickets as projection on my.Tickets actions {
+        action solve();
+        action assign();
+        action showPDF();
+    };
     entity POs as projection on my.POs;   
     entity AssignmentLogs as projection on my.AssignmentLogs;
+    entity AniLogs as projection on my.AniLogs;
+    action testAction();
+
 } ;
 
 
 
 annotate MonitorService.AssignmentLogs with @(
+
+    UI.HeaderInfo: {
+        TypeName: '{@i18n>AssignmentLog}',
+        TypeNamePlural: '{@i18n>AssignmentLogs}',
+        Title: { Value: createdAt },
+        Description: { Value: '{@i18n>AssignmentLog}' }
+    },
 
 
     UI.LineItem : [
@@ -51,6 +61,122 @@ annotate MonitorService.AssignmentLogs with @(
 } ;
 
 
+
+
+annotate MonitorService.POs with @(
+
+UI.LineItem : [
+        {
+            $Type : 'UI.DataField',
+            Value :  poNumber
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  poItem
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  FRS
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  FRSItem
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  service
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  description
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  quantity
+        },
+        {
+            $Type : 'UI.DataField',
+            Value :  value
+        }
+
+    ]
+) {
+    poNumber @title: '{i18n>poNumber}';
+    poItem @title: '{i18n>poItem}';
+    service @title: '{i18n>service}';
+    description @title: '{i18n>description}';
+    quantity @title: '{i18n>quantity}';
+    value @title: '{i18n>value}';
+    FRS @title: '{i18n>FRS}';
+    FRSItem @title: '{i18n>FRSItem }';
+};
+
+
+annotate MonitorService.AniLogs with @(
+
+
+    UI.LineItem : [
+        {
+            $Type : 'UI.DataField',
+            Value :  ticket
+        },
+ {
+            $Type : 'UI.DataField',
+            Value :  ticketSeq
+        },
+ {
+            $Type : 'UI.DataField',
+            Value :  nfnum
+        },
+         {
+            $Type : 'UI.DataField',
+            Value :  process
+        },
+         {
+            $Type : 'UI.DataField',
+            Value :  status
+        },
+         {
+            $Type : 'UI.DataField',
+            Value :  username
+        },
+         {
+            $Type : 'UI.DataField',
+            Value :  date
+        },                
+         {
+            $Type : 'UI.DataField',
+            Value :  time
+        },                
+         {
+            $Type : 'UI.DataField',
+            Value :  type
+        },                
+         {
+            $Type : 'UI.DataField',
+            Value :  msgno
+        },                
+         {
+            $Type : 'UI.DataField',
+            Value :  message
+        }              
+    ]
+
+){
+    ticketSeq @title: '{i18n>ticketSeq}';
+    ticket @title: '{i18n>ticket}';
+    nfnum @title: '{i18n>nfnum}';
+    process @title: '{i18n>process}';
+    status @title: '{i18n>status}';
+    username @title: '{i18n>username}';
+    date @title: '{i18n>date}';
+    type @title: '{i18n>type }';
+    msgno @title: '{i18n>msgno }';    
+    message @title: '{i18n>message }';
+
+};
+
+
 annotate MonitorService.Tickets with @(
 
     Capabilities : {
@@ -58,12 +184,6 @@ annotate MonitorService.Tickets with @(
         DeleteRestrictions:{Deletable: false}
     },        
 
-    UI.HeaderInfo: {
-        TypeName: '{@i18n>ticket}',
-        TypeNamePlural: '{@i18n>tickets}',
-        Title: { Value: ticket },
-        Description: { Value: '{@i18n>ticket}' }
-    },
 
      UI.Identification : [  {
             $Type : 'UI.DataFieldForAction',
@@ -302,7 +422,6 @@ annotate MonitorService.Tickets with @(
                     ID : 'NFAssignment',
                     Target : '@UI.FieldGroup#NFAssignment',
                 },
-
                 {
                     $Type : 'UI.ReferenceFacet',
                     Label : '{i18n>NFPartners}',
@@ -332,6 +451,12 @@ annotate MonitorService.Tickets with @(
         },
         {
             $Type : 'UI.ReferenceFacet',
+            Label : '{i18n>AniLogs}',
+            ID : 'AniLogs',
+            Target : 'AniLogs/@UI.LineItem'
+        },
+        {
+            $Type : 'UI.ReferenceFacet',
             Label : '{i18n>POs}',
             ID : 'POs',
             Target : 'ticketPOs/@UI.LineItem'
@@ -352,54 +477,5 @@ annotate MonitorService.Tickets with @(
         vendorName @title: '{i18n>vendorName}';
         status @title: '{i18n>status}';
         totalValue @title : '{i18n>totalValue}';
-};
-
-
-annotate MonitorService.POs with @(
-
-UI.LineItem : [
-        {
-            $Type : 'UI.DataField',
-            Value :  poNumber
-        },
-        {
-            $Type : 'UI.DataField',
-            Value :  poItem
-        },
-        {
-            $Type : 'UI.DataField',
-            Value :  FRS
-        },
-        {
-            $Type : 'UI.DataField',
-            Value :  FRSItem
-        },
-        {
-            $Type : 'UI.DataField',
-            Value :  service
-        },
-        {
-            $Type : 'UI.DataField',
-            Value :  description
-        },
-        {
-            $Type : 'UI.DataField',
-            Value :  quantity
-        },
-        {
-            $Type : 'UI.DataField',
-            Value :  value
-        }
-
-    ]
-) {
-    poNumber @title: '{i18n>poNumber}';
-    poItem @title: '{i18n>poItem}';
-    service @title: '{i18n>service}';
-    description @title: '{i18n>description}';
-    quantity @title: '{i18n>quantity}';
-    value @title: '{i18n>value}';
-    FRS @title: '{i18n>FRS}';
-    FRSItem @title: '{i18n>FRSItem }';
 };
 

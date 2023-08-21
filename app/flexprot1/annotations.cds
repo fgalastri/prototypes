@@ -9,73 +9,8 @@ annotate service.Tickets with @(
         status,
     ]
 );
-annotate service.Tickets with @(
-    UI.LineItem : [
-        {
-            $Type : 'UI.DataField',
-            Value : ticket,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : assignedArea,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : assignedTo,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : nfnum,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : series,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : issueDate,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : tomCNPJ,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : vendorCNPJ,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : vendor,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : vendorName,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : status,
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : totalValue,
-        },
-        {
-            $Type : 'UI.DataFieldForAction',
-            Label : 'Atribuir',
-            Action : 'MonitorService.assign',
-        },
-        {
-            $Type : 'UI.DataFieldForAction',
-            Label : 'Resolução',
-            Action : 'MonitorService.solve',
-        },
-        {
-            $Type : 'UI.DataFieldForAction',
-            Label : 'Exibir PDF',
-            Action : 'MonitorService.showPDF',
-        },
-    ]
-);
+
+
 annotate service.Tickets with @(
     UI.HeaderInfo : {
         TypeName : '{i18n>ticket}',
@@ -88,5 +23,27 @@ annotate service.Tickets with @(
             $Type : 'UI.DataField',
             Value : '{@i18n>ticket}',
         },
+    }
+);
+
+annotate service.AssignmentLogs with @(
+    UI.HeaderInfo : {
+        TypeName : '{i18n>AssignmentLog}',
+        TypeNamePlural : '{i18n>AssignmentLogs}',
+    }
+);
+
+
+annotate service.AniLogs with @(
+    UI.HeaderInfo : {
+        TypeName : '{i18n>AniLogs}',
+        TypeNamePlural : '{i18n>AniLogs}',
+    }
+);
+
+annotate service.POs with @(
+    UI.HeaderInfo : {
+        TypeName : '{i18n>PO}',
+        TypeNamePlural : '{i18n>POs}',
     }
 );
